@@ -1,5 +1,6 @@
 import json
 import os
+import copy
 
 class hospital:
     current_largest_id = 10000
@@ -58,7 +59,7 @@ class hospital:
     def book_doctor(self):
         doctor_type = input("Enter doctor type ").strip().lower()
         if doctor_type in self.worker_dict["doctor"]:
-            a = self.worker_dict["doctor"][doctor_type]["free"]
+            a = copy.copy(self.worker_dict["doctor"][doctor_type]["free"])
             self.worker_dict["doctor"][doctor_type]["busy"] = a
             for i in (self.worker_dict["doctor"][doctor_type]["free"]):
                 del self.worker_dict["doctor"][doctor_type]["free"][i]
@@ -66,7 +67,6 @@ class hospital:
         self.update_worker_DB()
                  
 
-        
     def set_doctor_free(self):
         doctor_id = int(input("Enter a doctors id: "))
         print(self.worker_dict)
