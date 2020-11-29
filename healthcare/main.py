@@ -1,5 +1,3 @@
-# git remote add origin https://github.com/Aarav-code/projects.git
-# git branch -M master
 # git push -u origin master
 
 
@@ -23,10 +21,9 @@ What would you like to do?
 1 for adding a worker;
 2 for removing a worker
 3 for printing worker records
-4 get doctor details
-5 for setting busy status
-8 for read_worker_DB
-9 for update_worker_DB          
+4 to book doctor
+5 to free the doctor
+8 for read_worker_DB         
 0 for exiting
 ========================
 """))
@@ -43,13 +40,12 @@ What would you like to do?
     elif user_input == 3:
         hosp.print_worker_dict()
     elif user_input == 4:
-        hosp.get_doctor()
+        hosp.book_doctor()
     elif user_input == 5:
-        hosp.set_busy_status()           
+        hosp.set_doctor_free()           
     elif user_input == 8:
         hosp.read_worker_DB()       
-    elif user_input == 9:
-        hosp.update_worker_DB()
+
     else:
         print("Enter a valid value.")   
 
