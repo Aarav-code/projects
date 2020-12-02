@@ -33,7 +33,6 @@ class hospital:
             self.worker_dict = json.load(f)
         self.current_largest_id = self.worker_dict["largest_id"]
             
-         
     def add_healthworker(self):
         name = input("Health worker name: ")
         job_title = input("Health worker job title: ")
@@ -50,27 +49,42 @@ class hospital:
 
     def remove_healthworker(self):
         id = input("Enter Health worker ID: ")
-        self.worker_dict.pop(id)
+        for i in self.worker_dict["doctor"]:
+            for j in self.worker_dict["doctor"][i]["busy"]:
+               if j == id:
+                   del self.worker_dict["doctor"][i]["busy"][j]
+                   break
+            for h in self.worker_dict["doctor"][i]["free"]:
+                if h == id:
+                    del self.worker_dict["doctor"][i]["free"][h]
+                    break
         self.update_worker_DB()
 
     def print_worker_dict(self):
         print(self.worker_dict)
 
     def book_doctor(self):
-        doctor_type = input("Enter doctor type ").strip().lower()
+        doctor_type = input("Enter doctor type: ")
         if doctor_type in self.worker_dict["doctor"]:
-            a = copy.copy(self.worker_dict["doctor"][doctor_type]["free"])
-            self.worker_dict["doctor"][doctor_type]["busy"] = a
-            for i in (self.worker_dict["doctor"][doctor_type]["free"]):
+            for i in self.worker_dict["doctor"][doctor_type]["free"]:
+                self.worker_dict["doctor"][doctor_type]["busy"][i] = self.worker_dict["doctor"][doctor_type]["free"][i]
                 del self.worker_dict["doctor"][doctor_type]["free"][i]
                 break
+        else:
+            print("Enter a valid doctor type")
         self.update_worker_DB()
                  
-
     def set_doctor_free(self):
-        doctor_id = int(input("Enter a doctors id: "))
-        print(self.worker_dict)
-        # radiologist
+        id = input("enter the doctors id: ")
+        for i in self.worker_dict["doctor"]:
+            for j in self.worker_dict["doctor"][i]["busy"]:
+                if j == id:
+                    self.worker_dict["doctor"][i]["free"][j] = self.worker_dict["doctor"][i]["busy"][j]
+                    del self.worker_dict["doctor"][i]["busy"][j]
+                    break
+        self.update_worker_DB()
+
+            
     
 
             
