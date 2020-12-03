@@ -48,40 +48,65 @@ class hospital:
         self.update_worker_DB()
 
     def remove_healthworker(self):
+        doctor_prof = None
+        doctor_status = None
         id = input("Enter Health worker ID: ")
-        for i in self.worker_dict["doctor"]:
-            for j in self.worker_dict["doctor"][i]["busy"]:
-               if j == id:
-                   del self.worker_dict["doctor"][i]["busy"][j]
-                   break
-            for h in self.worker_dict["doctor"][i]["free"]:
-                if h == id:
-                    del self.worker_dict["doctor"][i]["free"][h]
-                    break
+        doctor_dict = self.worker_dict["doctor"]
+        for prof in doctor_dict:
+            if id in self.worker_dict["doctor"][prof]["free"]:
+                doctor_prof = prof
+                doctor_status = "free"
+                break
+            elif id in self.worker_dict["doctor"][prof]["free"]:
+                doctor_prof = prof
+                doctor_status = "busy"
+                break
+        del self.worker_dict["doctor"][doctor_prof][doctor_status][id]
         self.update_worker_DB()
 
     def print_worker_dict(self):
         print(self.worker_dict)
 
     def book_doctor(self):
-        doctor_type = input("Enter doctor type: ")
-        if doctor_type in self.worker_dict["doctor"]:
-            for i in self.worker_dict["doctor"][doctor_type]["free"]:
-                self.worker_dict["doctor"][doctor_type]["busy"][i] = self.worker_dict["doctor"][doctor_type]["free"][i]
-                del self.worker_dict["doctor"][doctor_type]["free"][i]
-                break
-        else:
-            print("Enter a valid doctor type")
+        doctor_type = input("Enter doctor type: ").strip().lower()
+        doctor_dict = self.worker_dict["doctor"]
+        if doctor_type not in doctor_dict:
+            print("{} not found".format(doctor_type))
+            return
+        
+        free_list = doctor_dict[doctor_type]["free"]
+        if len(free_list) == 0:
+            print("No free doctors found")
+            return
+        
+        for id in free_list:
+            doctor_id = id
+            break
+
+        free_doc = free_list[doctor_id]
+        del free_list[doctor_id]
+
+        busy_list = doctor_dict[doctor_type]["busy"]
+        busy_list[doctor_id] = free_doc
         self.update_worker_DB()
-                 
+        return doctor_id
+
+
     def set_doctor_free(self):
+        doctor_found = False
         id = input("enter the doctors id: ")
-        for i in self.worker_dict["doctor"]:
-            for j in self.worker_dict["doctor"][i]["busy"]:
-                if j == id:
-                    self.worker_dict["doctor"][i]["free"][j] = self.worker_dict["doctor"][i]["busy"][j]
-                    del self.worker_dict["doctor"][i]["busy"][j]
-                    break
+        doctor_dict = self.worker_dict["doctor"]
+        for prof in doctor_dict:
+            if id in doctor_dict[prof]["busy"]:
+               doctor_found = True
+               doctor_prof = prof
+               break
+        if not doctor_found :
+            print("Doctor not found")
+            return
+
+        doctor_dict[doctor_prof]["free"][id] = doctor_dict[doctor_prof]["busy"][id]
+        del doctor_dict[doctor_prof]["busy"][id]
         self.update_worker_DB()
 
             
