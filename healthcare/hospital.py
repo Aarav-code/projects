@@ -23,13 +23,13 @@ class hospital:
         return self.current_largest_id
 
     def update_worker_DB(self):
-        with open('healthcare/worker_db.json', 'w') as f:
+        with open('worker_db.json', 'w') as f:
             json.dump(self.worker_dict, f, indent=4)
 
     def read_worker_DB(self):
-        if os.stat("healthcare/worker_db.json").st_size == 0:
+        if os.stat("worker_db.json").st_size == 0:
             return
-        with open('healthcare/worker_db.json') as f:
+        with open('worker_db.json') as f:
             self.worker_dict = json.load(f)
         self.current_largest_id = self.worker_dict["largest_id"]
             
